@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+/vendor/
+/node_modules/
+.DS_Store
+*.log
+*.sql.gz
+*.dump
+/private/
+/storage-private/
+/uploads/

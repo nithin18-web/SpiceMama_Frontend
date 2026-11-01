@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Sign in · Spice Mama admin</title>
+<link rel="icon" href="/assets/images/brand/logo-sm.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Guntur:wght@400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body class="admin">
+<main class="login">
+  <div class="art">
+    <a class="logo" href="/"><img src="/assets/images/brand/logo-sm.webp" width="320" height="201" alt="Spice Mama, back to the website"></a>
+    <div>
+      <div class="word" aria-hidden="true">Guntur</div>
+      <p>Manage the products and categories shown on the Spice Mama website.</p>
+    </div>
+  </div>
+  <div class="formside">
+    <form id="login-form" novalidate>
+      <div>
+        <h1>Sign in</h1>
+        <p style="margin:0;color:var(--ink-soft)">For Spice Mama staff only.</p>
+      </div>
+      <div id="login-alert" hidden></div>
+      <div class="field">
+        <label for="l-email">Email</label>
+        <input class="input" id="l-email" name="email" type="email" autocomplete="username" required inputmode="email" aria-describedby="le-email">
+        <p class="err" id="le-email" data-err="email"></p>
+      </div>
+      <div class="field">
+        <label for="l-pass">Password</label>
+        <div class="pw">
+          <input class="input" id="l-pass" name="password" type="password" autocomplete="current-password" required aria-describedby="le-password">
+          <button type="button" id="pw-toggle" aria-controls="l-pass" aria-pressed="false">Show</button>
+        </div>
+        <p class="err" id="le-password" data-err="password"></p>
+      </div>
+      <button class="btn btn-red" type="submit" id="login-btn">Sign in</button>
+      <p class="hint" style="margin:0;font-size:.88rem;color:var(--ink-soft)">Forgot your password? Ask the site owner to reset it.</p>
+    </form>
+  </div>
+</main>
+<script type="module" src="/assets/js/admin/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+openapi: 3.0.3
+info:
+  title: SpiceMama Website API
+  version: 1.0.0-draft
+  description: >
+    Draft contract for phase-1 catalogue and admin. Frontend and backend teams must
+    approve before implementation. Same-origin PHP session authentication.
+servers:
+  - url: /api/v1
+paths:
+  /products:
+    get:
+      summary: List published products
+      parameters:
+        - {name: category, in: query, schema: {type: string}}
+        - {name: q, in: query, schema: {type: string, maxLength: 100}}
+        - {name: page, in: query, schema: {type: integer, minimum: 1, default: 1}}
+        - {name: per_page, in: query, schema: {type: integer, minimum: 1, maximum: 50, default: 12}}
+      responses:
+        '200':
+          description: Published products and pagination
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, meta]
+                properties:
+                  data: {type: array, items: {$ref: '#/components/schemas/Product'}}
+                  meta: {$ref: '#/components/schemas/Pagination'}
+  /products/{slug}:
+    get:
+      summary: Retrieve one published product
+      parameters:
+        - {name: slug, in: path, required: true, schema: {type: string}}
+      responses:
+        '200': {$ref: '#/components/responses/ProductResponse'}
+        '404': {$ref: '#/components/responses/ErrorResponse'}
+  /categories:
+    get:
+      summary: List active categories
+      responses:
+        '200':
+          description: Active categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: {type: array, items: {$ref: '#/components/schemas/Category'}}
+  /admin/csrf:
+    get:
+      summary: Obtain session CSRF token, including pre-login session
+      responses:
+        '200':
+          description: CSRF token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      csrf_token: {type: string}
+  /admin/login:
+    post:
+      summary: Authenticate admin using CSRF token
+      parameters: [{$ref: '#/components/parameters/Csrf'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: {type: string, format: email}
+                password: {type: string, format: password}
+      responses:
+        '200': {$ref: '#/components/responses/AdminResponse'}
+        '401': {$ref: '#/components/responses/ErrorResponse'}
+        '403': {$ref: '#/components/responses/ErrorResponse'}
+        '429': {$ref: '#/components/responses/ErrorResponse'}
+  /admin/me:
+    get:
+      summary: Get current admin session
+      security: [{sessionCookie: []}]
+      responses:
+        '200': {$ref: '#/components/responses/AdminResponse'}
+        '401': {$ref: '#/components/responses/ErrorResponse'}
+  /admin/logout:
+    post:
+      summary: End admin session
+      security: [{sessionCookie: []}]
+      parameters: [{$ref: '#/components/parameters/Csrf'}]
+      responses:
+        '204': {description: Session invalidated}
+        '401': {$ref: '#/components/responses/ErrorResponse'}
+  /admin/products:
+    get:
+      summary: List products including drafts (admin only)
+      security: [{sessionCookie: []}]
+      responses:
+        '200':
+          description: Admin product list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: {type: array, items: {$ref: '#/components/schemas/Product'}}
+    post:
+      summary: Create draft product
+      security: [{sessionCookie: []}]
+      parameters: [{$ref: '#/components/parameters/Csrf'}]
+      requestBody: {$ref: '#/components/requestBodies/ProductInput'}
+      responses:
+        '201': {$ref: '#/components/responses/ProductResponse'}
+        '422': {$ref: '#/components/responses/ErrorResponse'}
+  /admin/products/{id}:
+    patch:
+      summary: Edit product (publishing uses separate endpoint)
+      security: [{sessionCookie: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: integer}}
+        - {$ref: '#/components/parameters/Csrf'}
+      requestBody: {$ref: '#/components/requestBodies/ProductInput'}
+      responses:
+        '200': {$ref: '#/components/responses/ProductResponse'}
+        '404': {$ref: '#/components/responses/ErrorResponse'}
+        '422': {$ref: '#/components/responses/ErrorResponse'}
+  /admin/products/{id}/status:
+    post:
+      summary: Set product status (draft/published/archived)
+      security: [{sessionCookie: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: integer}}
+        - {$ref: '#/components/parameters/Csrf'}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status: {type: string, enum: [draft, published, archived]}
+      responses:
+        '200': {$ref: '#/components/responses/ProductResponse'}
+  /admin/categories:
+    get:
+      summary: List all categories for admin
+      security: [{sessionCookie: []}]
+      responses:
+        '200':
+          description: Categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: {type: array, items: {$ref: '#/components/schemas/Category'}}
+    post:
+      summary: Create category
+      security: [{sessionCookie: []}]
+      parameters: [{$ref: '#/components/parameters/Csrf'}]
+      requestBody: {$ref: '#/components/requestBodies/CategoryInput'}
+      responses:
+        '201': {$ref: '#/components/responses/CategoryResponse'}
+  /admin/categories/{id}:
+    patch:
+      summary: Update category
+      security: [{sessionCookie: []}]
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: integer}}
+        - {$ref: '#/components/parameters/Csrf'}
+      requestBody: {$ref: '#/components/requestBodies/CategoryInput'}
+      responses:
+        '200': {$ref: '#/components/responses/CategoryResponse'}
+  /admin/images:
+    post:
+      summary: Upload product image
+      security: [{sessionCookie: []}]
+      parameters: [{$ref: '#/components/parameters/Csrf'}]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [product_id, file]
+              properties:
+                product_id: {type: integer}
+                file: {type: string, format: binary}
+                alt_text: {type: string, maxLength: 255}
+      responses:
+        '201':
+          description: Image metadata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: {$ref: '#/components/schemas/ProductImage'}
+        '413': {$ref: '#/components/responses/ErrorResponse'}
+        '422': {$ref: '#/components/responses/ErrorResponse'}
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+      description: Illustrative cookie name; implementation may use a custom session cookie.
+  parameters:
+    Csrf:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema: {type: string}
+  schemas:
+    ProductImage:
+      type: object
+      required: [id, url, alt_text, sort_order]
+      properties:
+        id: {type: integer}
+        url: {type: string, example: /uploads/products/sample.webp}
+        alt_text: {type: string}
+        sort_order: {type: integer}
+    Product:
+      type: object
+      required: [id, slug, name, category_id, status, images]
+      properties:
+        id: {type: integer}
+        slug: {type: string}
+        name: {type: string}
+        category_id: {type: integer}
+        short_description: {type: string}
+        description: {type: string}
+        pack_size_label: {type: string, nullable: true}
+        ingredients: {type: string, nullable: true}
+        status: {type: string, enum: [draft, published, archived]}
+        sort_order: {type: integer}
+        images: {type: array, items: {$ref: '#/components/schemas/ProductImage'}}
+    Category:
+      type: object
+      required: [id, name, slug, is_active]
+      properties:
+        id: {type: integer}
+        name: {type: string}
+        slug: {type: string}
+        description: {type: string, nullable: true}
+        sort_order: {type: integer}
+        is_active: {type: boolean}
+    Pagination:
+      type: object
+      properties:
+        page: {type: integer}
+        per_page: {type: integer}
+        total: {type: integer}
+        total_pages: {type: integer}
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: {type: string}
+            message: {type: string}
+            fields: {type: object, additionalProperties: {type: string}}
+  requestBodies:
+    ProductInput:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: {type: string, maxLength: 180}
+              slug: {type: string, maxLength: 200}
+              category_id: {type: integer}
+              short_description: {type: string, maxLength: 500}
+              description: {type: string}
+              pack_size_label: {type: string, nullable: true}
+              ingredients: {type: string, nullable: true}
+              sort_order: {type: integer}
+    CategoryInput:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: {type: string, maxLength: 120}
+              slug: {type: string, maxLength: 160}
+              description: {type: string, nullable: true}
+              sort_order: {type: integer}
+              is_active: {type: boolean}
+  responses:
+    ProductResponse:
+      description: Product
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: {$ref: '#/components/schemas/Product'}
+    CategoryResponse:
+      description: Category
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: {$ref: '#/components/schemas/Category'}
+    AdminResponse:
+      description: Authenticated admin
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  id: {type: integer}
+                  email: {type: string}
+                  display_name: {type: string}
+    ErrorResponse:
+      description: API error
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/Error'}

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Categories · Spice Mama admin</title>
+<link rel="icon" href="/assets/images/brand/logo-sm.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Guntur:wght@400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body class="admin" data-auth="pending" data-page="categories">
+<a class="skip" href="#main">Skip to content</a>
+<div class="boot" role="status">Checking your session…</div>
+<div class="shell">
+  <header class="topbar">
+    <a href="/admin/"><img src="/assets/images/brand/logo-sm.webp" width="320" height="201" alt="Spice Mama admin"></a>
+    <button type="button" data-open-side aria-controls="side" aria-expanded="false">Menu</button>
+  </header>
+  <aside class="side" id="side" data-open="false" aria-label="Admin">
+    <a class="logo" href="/admin/"><img src="/assets/images/brand/logo-sm.webp" width="320" height="201" alt="Spice Mama admin"></a>
+    <nav aria-label="Admin sections">
+      <a href="/admin/" data-nav="dashboard">Dashboard</a>
+      <a href="/admin/products.html" data-nav="products">Products</a>
+      <a href="/admin/product-edit.html" data-nav="new-product">Add a product</a>
+      <a href="/admin/categories.html" data-nav="categories">Categories</a>
+      <a href="/" target="_blank" rel="noopener">View the website ↗</a>
+    </nav>
+    <div class="who">
+      <span>Signed in as <strong data-admin-name>…</strong><span data-admin-email style="opacity:.7;font-size:.82rem"></span></span>
+      <button class="linkish" type="button" data-logout>Sign out</button>
+    </div>
+  </aside>
+  <main class="main" id="main">
+<div class="head">
+      <div>
+        <h1>Categories</h1>
+        <p>Groups shown as filters on the products page. Hidden categories don’t appear on the website.</p>
+      </div>
+      <button class="btn btn-red btn-sm" type="button" id="add-cat">Add a category</button>
+    </div>
+    <div id="cat-alert" hidden></div>
+    <div class="panel">
+      <div id="cats" aria-busy="true"><p class="list-empty">Loading categories…</p></div>
+    </div>
+
+    <dialog id="cat-dialog" aria-labelledby="cat-dlg-title">
+      <form id="cat-form" novalidate>
+        <h2 id="cat-dlg-title">Add a category</h2>
+        <div id="cat-form-alert" hidden></div>
+        <div class="field">
+          <label for="c-name">Name</label>
+          <input class="input" id="c-name" name="name" maxlength="120" required autocomplete="off" aria-describedby="ce-name">
+          <p class="err" id="ce-name" data-err="name"></p>
+        </div>
+        <div class="field">
+          <label for="c-slug">Web address</label>
+          <div class="slug-row"><span class="prefix">?category=</span><input class="input" id="c-slug" name="slug" maxlength="160" required autocomplete="off" spellcheck="false" aria-describedby="ce-slug"></div>
+          <p class="err" id="ce-slug" data-err="slug"></p>
+        </div>
+        <div class="field">
+          <label for="c-desc">Description <span style="font-weight:400;color:var(--ink-soft)">(optional)</span></label>
+          <textarea class="textarea" id="c-desc" name="description" style="min-height:80px" aria-describedby="ch-desc ce-description"></textarea>
+          <p class="hint" id="ch-desc">Shown above the products when this category is chosen.</p>
+          <p class="err" id="ce-description" data-err="description"></p>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="c-sort">Sort order</label>
+            <input class="input" id="c-sort" name="sort_order" type="number" inputmode="numeric" step="1" value="0" aria-describedby="ce-sort_order">
+            <p class="err" id="ce-sort_order" data-err="sort_order"></p>
+          </div>
+          <div class="field" style="align-content:end">
+            <label class="check"><input type="checkbox" name="is_active" checked> Show on website</label>
+          </div>
+        </div>
+        <div class="dlg-acts">
+          <button class="btn btn-line btn-sm" type="button" id="cat-cancel">Cancel</button>
+          <button class="btn btn-red btn-sm" type="submit" id="cat-save">Save category</button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+</div>
+<script type="module" src="/assets/js/admin/categories.js"></script>
+</body>
+</html>

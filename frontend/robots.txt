@@ -1,0 +1,7 @@
+# Proposal: confirm with the owner before launch.
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+
+# Add once the domain and HTTPS are verified:
+# Sitemap: https://spicemama.in/sitemap.xml

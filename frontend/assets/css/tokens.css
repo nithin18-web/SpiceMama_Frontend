@@ -1,0 +1,49 @@
+/* SpiceMama design tokens. Colours, type and spacing from the approved design. */
+:root {
+  /* brand colours */
+  --red: #C8141C;
+  --red-deep: #9E0F15;
+  --ivory: #FBF4E6;
+  --ivory-deep: #F3E8D2;
+  --white: #FFFFFF;
+  --green: #0E5A30;
+  --green-deep: #0A4424;
+  --gold: #C79A3B;
+  --ink: #2B1510;
+  --ink-soft: #5A3C33;
+  --line: #E2D2B8;
+  --line-strong: #B9A58E;
+
+  /* status colours (admin, messages) */
+  --ok: #0E5A30;
+  --ok-bg: #E3F1E7;
+  --warn: #8A5A00;
+  --warn-bg: #FBEFD3;
+  --bad: #9E0F15;
+  --bad-bg: #FBE3E1;
+
+  /* type */
+  --display: "Rozha One", Georgia, "Times New Roman", serif;
+  --body: "Hind Guntur", "Hind", "Segoe UI", system-ui, sans-serif;
+  --fs-body: clamp(16px, 1.05vw + 8px, 19px);
+  --fs-small: .86rem;
+
+  /* space and shape */
+  --pad: clamp(20px, 5.5vw, 88px);
+  --gap: clamp(16px, 2.4vw, 32px);
+  --section: clamp(72px, 10vw, 160px);
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 28px;
+  --r-pill: 999px;
+  --shadow-chip: 0 6px 20px rgba(60, 10, 5, .14);
+  --shadow-pack: drop-shadow(0 22px 30px rgba(0, 0, 0, .28));
+
+  /* motion */
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --t-fast: .18s;
+  --t-med: .5s;
+
+  --nav-h: 84px;
+}

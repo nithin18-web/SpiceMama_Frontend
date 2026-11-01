@@ -1,0 +1,2 @@
+# Agent rules
+Read README.md, ARCHITECTURE.md and API_CONTRACT.yaml before editing. Claude owns frontend/; Codex owns backend/. Shared contract changes require explicit approval. Do not invent business facts. Never expose credentials, write to live hosting, change DNS, purchase services, create production databases or deploy without owner approval. All code changes should be reviewed and tested before release.

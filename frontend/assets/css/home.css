@@ -1,0 +1,194 @@
+/* Home page: the approved design's story page. Two modes:
+   .motion on <html>  = pinned scroll scenes (tall-enough screens, motion allowed)
+   no .motion         = simple stacked layout (reduced motion, short screens, no JS) */
+
+/* ---------- HERO + ORIGIN (one pinned stage) ---------- */
+.hero { position: relative; background: var(--red) }
+.stage { position: relative; overflow: hidden }
+.layer { position: absolute; inset: 0 }
+.layer.ivory { background: var(--ivory) }
+.layer.red { background: var(--red) }
+.bigword { position: absolute; left: 50%; bottom: -.17em; transform: translateX(-50%); font-family: var(--display); font-size: clamp(120px, 27vw, 520px); line-height: 1; white-space: nowrap; pointer-events: none; user-select: none }
+.layer.ivory .bigword { color: var(--red) }
+.layer.red .bigword { color: var(--ivory) }
+.hero-copy { position: relative; z-index: 3 }
+.hero-copy h1 { font-size: clamp(40px, 4.6vw, 78px); color: var(--ink); max-width: 11.5ch }
+.hero-copy .lede { font-size: 1.08em; color: var(--ink-soft); max-width: 30ch; margin-top: 18px }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px }
+.te-tag { position: absolute; z-index: 3; font-weight: 600; font-size: clamp(22px, 1.8vw, 30px); color: var(--ivory); letter-spacing: .02em; line-height: 1.3; text-align: right; margin: 0 }
+.te-tag span { display: block; font-weight: 400; opacity: .85; font-size: .85em }
+.pouch { position: absolute; z-index: 2; filter: drop-shadow(0 30px 40px rgba(50, 5, 0, .35)) drop-shadow(0 6px 10px rgba(50, 5, 0, .25)) }
+.origin { z-index: 3; color: var(--ivory) }
+.origin h2 { font-size: clamp(38px, 4.2vw, 72px); max-width: 12ch; margin-bottom: 22px }
+.origin p { max-width: 44ch; color: #FFEDE3 }
+.origin .since { display: inline-flex; align-items: baseline; gap: 10px; margin-bottom: 18px; font-weight: 600 }
+.origin .since b { font-family: var(--display); font-weight: 400; font-size: 1.6em; color: #F1C76A }
+.origin .more { color: var(--ivory); font-weight: 600; text-underline-offset: 4px; display: inline-flex; align-items: center; gap: 8px; min-height: 44px }
+.origin .more svg { width: 18px; height: 18px }
+.scroll-hint { position: absolute; z-index: 3; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); transform: translateX(-50%); margin: 0; font-size: var(--fs-small); font-weight: 600; color: var(--ink-soft); display: none }
+
+/* motion mode: pinned */
+.motion .hero { height: 320vh }
+.motion .stage { position: sticky; top: 0; height: 100vh; height: 100svh }
+.motion .layer.ivory { clip-path: inset(0 calc(100% - var(--seam, 50%)) 0 0) }
+.motion .layer.red { clip-path: inset(0 0 0 var(--seam, 50%)) }
+.motion .hero-copy { position: absolute; left: var(--pad); top: 22vh; width: min(40vw, 560px) }
+.motion .te-tag { right: var(--pad); top: 16vh }
+.motion .pouch { left: 50%; top: 52%; height: min(72vh, 780px); width: auto; transform: translate(-50%, -50%) translate(var(--px, 0), var(--py, 0)) rotate(var(--pr, -5deg)) scale(var(--ps, 1)); will-change: transform }
+.motion .origin { position: absolute; left: var(--pad); top: 50%; transform: translateY(calc(-50% + var(--oy, 30px))); opacity: var(--oo, 0); width: min(48vw, 640px); pointer-events: var(--opev, none); visibility: var(--ovis, hidden) }
+.motion .bigword { opacity: var(--bwo, 1) }
+.motion .scroll-hint { display: block; opacity: var(--hint, 1) }
+
+/* static mode: stacked; the pouch straddles the ivory/red seam like the pack itself */
+html:not(.motion) .stage { display: flex; flex-direction: column; background: var(--red) }
+html:not(.motion) .layer { display: none }
+html:not(.motion) .hero-copy { background: var(--ivory); padding: 118px var(--pad) clamp(190px, 26vw, 300px) }
+html:not(.motion) .pouch { position: relative; z-index: 4; align-self: center; width: min(66vw, 400px); height: auto; margin-top: calc(-1 * clamp(160px, 22vw, 260px)) }
+html:not(.motion) .te-tag { display: none }
+html:not(.motion) .origin { padding: 64px var(--pad) 90px }
+@media (max-width: 899px) { html:not(.motion) .hero-copy { padding-top: 100px } }
+@media (min-width: 900px) {
+  html:not(.motion) .stage { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr) }
+  html:not(.motion) .hero-copy { grid-column: 1; grid-row: 1; min-height: 92vh; padding: 150px var(--pad) 110px; display: flex; flex-direction: column; justify-content: center }
+  html:not(.motion) .pouch { grid-column: 2; grid-row: 1; justify-self: start; align-self: center; margin: 0 0 0 -10vw; width: min(34vw, 440px) }
+  html:not(.motion) .origin { grid-column: 1 / -1 }
+}
+
+/* ---------- RANGE ---------- */
+.range { --bg: var(--red); --fg: var(--ivory); background: var(--bg); color: var(--fg); transition: background-color .6s ease, color .6s ease; position: relative }
+.range-intro h2 { font-size: clamp(44px, 5vw, 86px); margin-bottom: 18px }
+.range-intro p { max-width: 30ch; opacity: .92 }
+.range-intro .btn { margin-top: 8px }
+.range-all { color: inherit; border-color: currentColor }
+.card { flex: none; display: flex; flex-direction: column; align-items: flex-start; position: relative }
+.card img { filter: var(--shadow-pack); transition: transform .5s ease; height: auto }
+.card .maker { font-size: var(--fs-small); font-weight: 600; opacity: .8; margin: 22px 0 0 }
+.card h3 { font-size: clamp(26px, 2.1vw, 38px); margin: 4px 0 6px }
+.card h3 a { text-decoration: none }
+.card h3 a::after { content: ""; position: absolute; inset: 0 }
+.card h3 a:focus-visible { outline: none }
+.card:focus-within { outline: 3px solid var(--gold); outline-offset: 8px; border-radius: 12px }
+.card p { font-size: .95rem; max-width: 30ch; margin: 0; opacity: .92 }
+.card .size { display: inline-block; margin-top: 10px; font-weight: 600; font-size: var(--fs-small); border: 1.5px solid currentColor; border-radius: var(--r-pill); padding: 3px 12px 1px }
+.card .go { margin-top: 14px; font-weight: 600; font-size: .92rem; display: inline-flex; align-items: center; gap: 6px; opacity: .9 }
+.card .go svg { width: 16px; height: 16px; transition: transform var(--t-fast) ease }
+@media (hover: hover) { .card:hover .go svg { transform: translateX(4px) } }
+.card.end { align-self: center; justify-content: center; gap: 14px }
+.card.end h3 a::after { display: none }
+.card.is-skel { width: min(30vw, 340px); height: min(60vh, 600px) }
+.card.is-skel .skel { width: 100%; height: 100%; background-color: rgba(255, 255, 255, .08) }
+.card.state-card { width: min(80vw, 420px); align-self: center; gap: 12px }
+.card.state-card h3 a::after { display: none }
+.progress { font-weight: 600; font-size: .92rem; opacity: .85; margin: 0 }
+
+.motion .range-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: flex; align-items: center }
+.motion .track { display: flex; align-items: flex-end; gap: 7vw; padding: 0 12vw 0 var(--pad); will-change: transform }
+.motion .range-intro { flex: none; width: min(30vw, 440px); align-self: center }
+.motion .card img { height: min(54vh, 560px); width: auto }
+.motion .card:not(.on) img { transform: scale(.9) }
+.motion .progress { position: absolute; left: var(--pad); bottom: calc(env(safe-area-inset-bottom, 0px) + 34px) }
+html:not(.motion) .range { --bg: var(--ivory); --fg: var(--ink); padding: 90px 0 70px }
+html:not(.motion) .track { display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 var(--pad) 24px; scrollbar-width: thin; overscroll-behavior-x: contain }
+html:not(.motion) .range-intro { flex: none; width: min(78vw, 380px); scroll-snap-align: start }
+html:not(.motion) .card { scroll-snap-align: center; width: min(72vw, 300px); background: var(--c); color: var(--cf); border-radius: var(--r-lg); padding: 22px 20px 24px }
+html:not(.motion) .card img { height: 300px; width: auto; margin: 0 auto }
+html:not(.motion) .card.end, html:not(.motion) .card.state-card { background: var(--white); color: var(--ink); border: 1.5px solid var(--line) }
+html:not(.motion) .card.is-skel { padding: 0; height: 460px; background: none }
+html:not(.motion) .progress { display: none }
+
+/* ---------- KITCHEN ---------- */
+.kitchen { background: var(--ivory); padding: clamp(80px, 11vw, 170px) var(--pad) clamp(70px, 9vw, 140px) }
+.kitchen-head { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 4vw; align-items: end; margin-bottom: clamp(36px, 5vw, 70px) }
+.kitchen-head h2 { font-size: clamp(46px, 6.2vw, 110px); color: var(--red) }
+.kitchen-head p { color: var(--ink-soft); margin: 0 }
+.kitchen-head .ph-note { margin-top: 14px; color: var(--ink-soft) }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px }
+.tab { font-family: var(--body); font-size: 1rem; font-weight: 600; min-height: 46px; padding: 10px 20px 7px; border-radius: var(--r-pill); border: 2px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; transition: background-color var(--t-fast) ease, color var(--t-fast) ease }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--ivory) }
+@media (hover: hover) { .tab[aria-selected="false"]:hover { background: rgba(43, 21, 16, .06) } }
+.recipe { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); align-items: start }
+.recipe:not([hidden]) { animation: fade-up .45s var(--ease-out) }
+@keyframes fade-up { from { opacity: 0; transform: translateY(10px) } }
+.dish { position: relative; border-radius: var(--r-xl); overflow: hidden; aspect-ratio: 4 / 3; background: #e9dcc6 }
+.dish img { width: 100%; height: 115%; object-fit: cover; transform: translateY(var(--par, 0px)) }
+.dish .tagph { position: absolute; left: 14px; bottom: 14px; background: rgba(251, 244, 230, .94); color: var(--ink); font-size: .8rem; font-weight: 500; border-radius: var(--r-sm); padding: 6px 10px 4px; border: 1.5px dashed var(--ink-soft); max-width: 80% }
+.recipe h3 { font-size: clamp(32px, 3vw, 52px); margin-bottom: 6px }
+.recipe .uses { display: flex; align-items: center; gap: 12px; margin: 14px 0 22px; font-weight: 600; font-size: .95rem; text-decoration: none; width: fit-content; border-radius: var(--r-md) }
+.recipe .uses img { height: 74px; width: auto; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .18)); transition: transform var(--t-fast) ease }
+.recipe .uses span { text-decoration: underline; text-decoration-color: rgba(43, 21, 16, .3); text-underline-offset: 4px }
+@media (hover: hover) { .recipe .uses:hover img { transform: rotate(-4deg) scale(1.05) } }
+.recipe h4 { font-family: var(--body); font-size: .95rem; font-weight: 700; margin: 20px 0 6px; color: var(--red) }
+.recipe ul, .recipe ol { margin: 0; padding-left: 1.2em }
+.recipe li { margin: .25em 0; max-width: 52ch }
+.recipe .meta { color: var(--ink-soft); font-size: .92rem }
+
+/* ---------- PICKLE ---------- */
+.pickle { background: var(--red); color: var(--ivory); padding: clamp(70px, 9vw, 140px) var(--pad); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 5vw; align-items: center; overflow: hidden }
+.pickle .te { font-weight: 700; font-size: clamp(34px, 4.4vw, 74px); line-height: 1.18; margin: 0 0 22px }
+.pickle .te small { display: block; font-size: .55em; font-weight: 600; opacity: .92 }
+.pickle p { color: #FFEDE3 }
+.posters { position: relative; height: clamp(360px, 44vw, 660px) }
+.posters img { position: absolute; width: 62%; border-radius: 10px; box-shadow: 0 24px 50px rgba(60, 0, 0, .4) }
+.posters img:first-child { left: 0; top: 6%; transform: rotate(-4deg) translateY(var(--pa, 0px)) }
+.posters img:last-child { right: 0; top: 0; transform: rotate(3deg) translateY(var(--pb, 0px)) }
+
+/* ---------- PROMISE ---------- */
+.promise { background: var(--white); padding: clamp(80px, 11vw, 170px) var(--pad) }
+.promise h2 { font-size: clamp(44px, 5.6vw, 100px); color: var(--ink); max-width: 12ch; margin-bottom: 18px }
+.promise .intro { color: var(--ink-soft); max-width: 52ch; margin-bottom: clamp(40px, 5vw, 70px) }
+.labels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px) }
+.label figure { margin: 0 }
+.label .crop { background: var(--ivory); border-radius: 20px; padding: 24px; display: flex; justify-content: center; overflow: hidden }
+.label .crop img { width: min(100%, 300px); height: auto; border-radius: 6px; box-shadow: 0 10px 26px rgba(0, 0, 0, .12); transform: scale(var(--ls, 1)); transform-origin: 50% 30% }
+.label figcaption { margin-top: 16px }
+.label figcaption b { font-family: var(--display); font-weight: 400; font-size: clamp(24px, 2vw, 34px); display: block; color: var(--red); line-height: 1.1; margin-bottom: 6px }
+.marks { margin-top: clamp(50px, 6vw, 90px); display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 5vw; align-items: start; border-top: 2px solid var(--ink); padding-top: 36px }
+.marks h3 { font-size: clamp(28px, 2.6vw, 44px) }
+.marks dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 12px 28px }
+.marks dt { font-weight: 700 }
+.marks dd { margin: 0; color: var(--ink-soft) }
+
+/* ---------- STOCKISTS ---------- */
+.partners { background: var(--green); color: var(--ivory); padding: clamp(80px, 10vw, 160px) var(--pad); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 6vw; align-items: start; position: relative; overflow: hidden }
+.partners h2 { font-size: clamp(48px, 6vw, 108px); max-width: 9ch; margin-bottom: 22px }
+.partners > div > p { color: #E7F2EA }
+.partners .ph-note { margin-top: 28px }
+
+@media (max-width: 899px) {
+  .kitchen-head, .recipe, .pickle, .partners, .marks { grid-template-columns: 1fr }
+  .labels { grid-template-columns: 1fr }
+  .posters { height: min(110vw, 520px) }
+  .marks dl { grid-template-columns: 1fr; gap: 2px }
+  .marks dd { margin-bottom: 12px }
+}
+
+/* ---------- phone motion: same story, portrait choreography ---------- */
+@media (max-width: 899px) {
+  .motion .layer.ivory { clip-path: inset(0 0 calc(100% - var(--seam, 55%)) 0) }
+  .motion .layer.red { clip-path: inset(var(--seam, 55%) 0 0 0) }
+  .motion .bigword { font-size: 31vw; bottom: -.14em }
+  .motion .hero-copy { top: calc(env(safe-area-inset-top, 0px) + 88px); left: var(--pad); right: var(--pad); width: auto }
+  .motion .hero-copy h1 { font-size: clamp(30px, 8.4vw, 40px); max-width: none }
+  .motion .hero-copy .lede { font-size: 1rem; margin-top: 12px }
+  .motion .ctas { margin-top: 18px }
+  .motion .ctas .btn-line { display: none }
+  .motion .te-tag { display: none }
+  .motion .pouch { top: 76%; height: min(44svh, 420px) }
+  .motion .scroll-hint { display: none }
+  .motion .origin { top: calc(env(safe-area-inset-top, 0px) + 84px); left: var(--pad); right: var(--pad); width: auto; transform: translateY(var(--oy, 30px)) }
+  .motion .origin .since { margin-bottom: 10px }
+  .motion .origin h2 { font-size: clamp(32px, 8.6vw, 42px); margin-bottom: 14px }
+  .motion .origin p { font-size: .95rem; line-height: 1.55; max-width: none }
+  .motion .origin .ph-note { font-size: .78rem; max-width: 62% }
+  .motion .track { gap: 12vw; padding: 0 14vw 0 var(--pad) }
+  .motion .range-intro { width: 76vw }
+  .motion .range-intro h2 { font-size: clamp(40px, 11vw, 54px) }
+  .motion .card { width: 68vw }
+  .motion .card.is-skel { height: 56svh }
+  .motion .card img { height: min(44svh, 430px) }
+  .motion .card .maker { margin-top: 16px }
+  .motion .card h3 { font-size: clamp(24px, 7vw, 30px) }
+  .motion .range-stage { align-items: center; padding-top: 40px }
+  .motion .progress { bottom: calc(env(safe-area-inset-bottom, 0px) + 22px) }
+}
+@media (prefers-reduced-motion: reduce) { .recipe:not([hidden]) { animation: none } }

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Edit product · Spice Mama admin</title>
+<link rel="icon" href="/assets/images/brand/logo-sm.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Guntur:wght@400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body class="admin" data-auth="pending" data-page="products">
+<a class="skip" href="#main">Skip to content</a>
+<div class="boot" role="status">Checking your session…</div>
+<div class="shell">
+  <header class="topbar">
+    <a href="/admin/"><img src="/assets/images/brand/logo-sm.webp" width="320" height="201" alt="Spice Mama admin"></a>
+    <button type="button" data-open-side aria-controls="side" aria-expanded="false">Menu</button>
+  </header>
+  <aside class="side" id="side" data-open="false" aria-label="Admin">
+    <a class="logo" href="/admin/"><img src="/assets/images/brand/logo-sm.webp" width="320" height="201" alt="Spice Mama admin"></a>
+    <nav aria-label="Admin sections">
+      <a href="/admin/" data-nav="dashboard">Dashboard</a>
+      <a href="/admin/products.html" data-nav="products">Products</a>
+      <a href="/admin/product-edit.html" data-nav="new-product">Add a product</a>
+      <a href="/admin/categories.html" data-nav="categories">Categories</a>
+      <a href="/" target="_blank" rel="noopener">View the website ↗</a>
+    </nav>
+    <div class="who">
+      <span>Signed in as <strong data-admin-name>…</strong><span data-admin-email style="opacity:.7;font-size:.82rem"></span></span>
+      <button class="linkish" type="button" data-logout>Sign out</button>
+    </div>
+  </aside>
+  <main class="main" id="main">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/admin/products.html">Products</a></li><li><span aria-current="page" id="crumb-name">New product</span></li></ol></nav>
+    <div class="head">
+      <div>
+        <h1 id="edit-title">Add a product</h1>
+        <p id="edit-sub">New products start as drafts. They only show on the website once you publish them.</p>
+      </div>
+      <a class="btn btn-line btn-sm" id="view-live" href="#" target="_blank" rel="noopener" hidden>View on website ↗</a>
+    </div>
+    <div id="form-alert" hidden></div>
+    <div id="loading" class="panel"><p class="list-empty">Loading product…</p></div>
+
+    <div class="form-grid" id="editor" hidden>
+      <form class="panel" id="product-form" novalidate>
+        <div class="fields">
+          <div class="field">
+            <label for="f-name">Product name</label>
+            <input class="input" id="f-name" name="name" maxlength="180" required autocomplete="off" aria-describedby="e-name">
+            <p class="err" id="e-name" data-err="name"></p>
+          </div>
+          <div class="field">
+            <label for="f-slug">Web address</label>
+            <div class="slug-row"><span class="prefix">/product.html?slug=</span><input class="input" id="f-slug" name="slug" maxlength="200" required autocomplete="off" spellcheck="false" aria-describedby="h-slug e-slug"></div>
+            <p class="hint" id="h-slug">Filled in from the name. Lowercase letters, numbers and dashes. Changing it later breaks old links.</p>
+            <p class="err" id="e-slug" data-err="slug"></p>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label for="f-category">Category</label>
+              <select class="select" id="f-category" name="category_id" required aria-describedby="e-category_id"><option value="">Choose a category</option></select>
+              <p class="err" id="e-category_id" data-err="category_id"></p>
+            </div>
+            <div class="field">
+              <label for="f-pack">Pack size <span style="font-weight:400;color:var(--ink-soft)">(optional)</span></label>
+              <input class="input" id="f-pack" name="pack_size_label" maxlength="100" placeholder="e.g. 100 g" aria-describedby="h-pack e-pack_size_label">
+              <p class="hint" id="h-pack">Only if printed on the pack. Leave empty to hide.</p>
+              <p class="err" id="e-pack_size_label" data-err="pack_size_label"></p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-short">Short description</label>
+            <textarea class="textarea" id="f-short" name="short_description" maxlength="500" style="min-height:90px" aria-describedby="h-short e-short_description"></textarea>
+            <span class="counter" id="c-short" aria-live="polite">0 / 500</span>
+            <p class="hint" id="h-short">One line shown on product cards.</p>
+            <p class="err" id="e-short_description" data-err="short_description"></p>
+          </div>
+          <div class="field">
+            <label for="f-desc">Full description</label>
+            <textarea class="textarea" id="f-desc" name="description" aria-describedby="h-desc e-description"></textarea>
+            <p class="hint" id="h-desc">Shown on the product page as plain text. Line breaks are kept.</p>
+            <p class="err" id="e-description" data-err="description"></p>
+          </div>
+          <div class="field">
+            <label for="f-ingr">Ingredients <span style="font-weight:400;color:var(--ink-soft)">(optional)</span></label>
+            <textarea class="textarea" id="f-ingr" name="ingredients" style="min-height:80px" aria-describedby="h-ingr e-ingredients"></textarea>
+            <p class="hint" id="h-ingr">Exactly as printed on the pack. Leave empty to hide.</p>
+            <p class="err" id="e-ingredients" data-err="ingredients"></p>
+          </div>
+          <div class="field" style="max-width:200px">
+            <label for="f-sort">Sort order</label>
+            <input class="input" id="f-sort" name="sort_order" type="number" inputmode="numeric" step="1" value="0" aria-describedby="h-sort e-sort_order">
+            <p class="hint" id="h-sort">Lower numbers show first.</p>
+            <p class="err" id="e-sort_order" data-err="sort_order"></p>
+          </div>
+        </div>
+        <div class="savebar">
+          <button class="btn btn-red" type="submit" id="save-btn">Save draft</button>
+          <a class="btn btn-line" href="/admin/products.html">Back to products</a>
+          <p class="msg" id="save-msg" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+
+      <div>
+        <section class="panel status-box" aria-labelledby="status-title" id="status-panel" hidden>
+          <div class="now"><h2 id="status-title" style="margin:0">Status</h2><span id="status-badge"></span></div>
+          <p id="status-help"></p>
+          <div class="acts" id="status-acts"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="photos-title">
+          <h2 id="photos-title">Photos</h2>
+          <div id="photos-locked">
+            <p class="note-box" style="margin:0">Save the product first, then you can add photos.</p>
+          </div>
+          <div id="photos" hidden>
+            <div class="imgs" id="img-list"></div>
+            <form id="upload-form" novalidate>
+              <div class="drop" id="drop">
+                <input type="file" id="f-file" name="file" accept="image/jpeg,image/png,image/webp" aria-describedby="h-file e-file">
+                <strong>Drop a photo here</strong>
+                <span>or <span class="pick">choose a file</span></span>
+                <span class="hint" id="h-file" style="font-size:.82rem;color:var(--ink-soft)">JPEG, PNG or WebP, up to 5 MB</span>
+              </div>
+              <p class="err" id="e-file" data-err="file" style="color:var(--bad);font-weight:600;font-size:.88rem;margin:8px 0 0"></p>
+              <div id="upload-preview" hidden>
+                <div class="preview"><img id="prev-img" alt=""><div class="meta" id="prev-meta"></div></div>
+                <div class="field" style="margin-top:12px">
+                  <label for="f-alt">Describe the photo</label>
+                  <input class="input" id="f-alt" name="alt_text" maxlength="255" placeholder="e.g. Turmeric Powder 100 g pack, front" aria-describedby="h-alt e-alt_text">
+                  <p class="hint" id="h-alt">Read aloud to people who can’t see the image.</p>
+                  <p class="err" id="e-alt_text" data-err="alt_text"></p>
+                </div>
+                <div class="bar" id="up-bar" hidden aria-hidden="true"><span></span></div>
+                <div class="actions-row" style="margin-top:12px">
+                  <button class="btn btn-green btn-sm" type="submit" id="up-btn">Upload photo</button>
+                  <button class="btn btn-line btn-sm" type="button" id="up-cancel">Cancel</button>
+                </div>
+              </div>
+              <p class="msg" id="up-msg" role="status" aria-live="polite" style="font-size:.9rem;margin:10px 0 0"></p>
+            </form>
+            <p class="note-box">Removing or reordering photos isn’t available yet: the API doesn’t support it.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="module" src="/assets/js/admin/product-edit.js"></script>
+</body>
+</html>
