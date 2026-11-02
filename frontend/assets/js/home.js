@@ -42,12 +42,13 @@ const target = (q, w) => w * 0.5 + Math.max(0, c1 - w * 0.5) * seg(q, 0.8, 1);
 const motionOn = () => root.classList.contains('motion');
 
 // ---------- range cards ----------
-function productCard(p) {
+function productCard(p, i = 0) {
   const look = lookFor(p);
   const im = primaryImage(p);
   return h('article', { class: 'card', id: `p-${p.slug}`, dataset: { c: look.c, f: look.f }, vars: { '--c': look.c, '--cf': look.f } },
     im
-      ? h('img', { src: im.url, alt: im.alt_text || p.name, loading: 'lazy', decoding: 'async' })
+      // First packs load straight away so the shelf isn't blank as it scrolls into view.
+      ? h('img', { src: im.url, alt: im.alt_text || p.name, loading: i < 4 ? 'eager' : 'lazy', decoding: 'async' })
       : h('div', { class: 'noimg ph', style: { height: '40vh', display: 'grid', placeItems: 'center', width: '100%' } }, 'Photo to come'),
     look.line ? h('p', { class: 'maker' }, look.line) : h('p', { class: 'maker' }, ''),
     h('h3', {}, h('a', { href: links.product(p.slug) }, p.name)),
@@ -82,7 +83,7 @@ async function loadRange() {
       rangeStatus.textContent = 'No products to show yet.';
       ptotal.textContent = '0';
     } else {
-      list.forEach((p) => track.append(productCard(p)));
+      list.forEach((p, i) => track.append(productCard(p, i)));
       if (total > list.length) track.append(endCard(total));
       ptotal.textContent = String(list.length);
       rangeStatus.textContent = `Showing ${list.length} of ${total} products.`;

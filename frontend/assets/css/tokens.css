@@ -38,7 +38,7 @@
   --r-xl: 28px;
   --r-pill: 999px;
   --shadow-chip: 0 6px 20px rgba(60, 10, 5, .14);
-  --shadow-pack: drop-shadow(0 22px 30px rgba(0, 0, 0, .28));
+  --shadow-pack: drop-shadow(0 10px 12px rgba(0, 0, 0, .14));
 
   /* motion */
   --ease-out: cubic-bezier(.22, 1, .36, 1);

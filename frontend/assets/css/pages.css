@@ -40,7 +40,7 @@
 .pd { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); align-items: start }
 .gallery { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 100px) }
 .stagebox { background: var(--c, var(--red)); border-radius: var(--r-xl); aspect-ratio: 1 / 1.05; display: grid; place-items: center; padding: clamp(24px, 4vw, 56px); overflow: hidden; position: relative }
-.stagebox img { max-height: 100%; width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .3)); animation: pack-in .6s var(--ease-out) }
+.stagebox img { max-height: 100%; width: auto; max-width: 100%; object-fit: contain; filter: var(--shadow-pack); animation: pack-in .6s var(--ease-out) }
 @keyframes pack-in { from { opacity: 0; transform: translateY(16px) rotate(-2deg) scale(.97) } }
 .stagebox .noimg { color: var(--cf, var(--ivory)); border: 1.5px dashed currentColor; border-radius: var(--r-md); padding: 24px; text-align: center; opacity: .85 }
 .thumbs { display: flex; gap: 10px; margin-top: 12px; overflow-x: auto; padding: 4px 2px }
