@@ -103,7 +103,32 @@ export function busy(btn, on, label) {
   }
 }
 
-export const STATUS_LABEL = { draft: 'Draft', published: 'Published', archived: 'Archived' };
+// Mirrors the server's publishing rules so the Publish button can say what is missing.
+// The server still decides; its 422 field messages are shown if this ever disagrees.
+const blank = (s) => !s || !/[^\p{Z}\s]/u.test(s);
+export function publishProblems(p, category) {
+  const out = [];
+  if (blank(p.short_description)) out.push('add a short description');
+  if (blank(p.description)) out.push('add a full description');
+  if (!(p.images || []).some((im) => !blank(im.alt_text))) out.push('add a photo with a description');
+  if (category && !category.is_active) out.push(`make the “${category.name}” category visible`);
+  return out;
+}
+
+// Plain sentence from a publishing 422 (fields) or the local check above.
+export function publishMessage(problems) {
+  const list = problems.join(', ');
+  return `To publish, ${list.replace(/, ([^,]*)$/, ' and $1')}.`;
+}
+
+export function publishFailure(err) {
+  if (err?.status === 422 && err.fields && Object.keys(err.fields).length) {
+    return `Can’t publish yet: ${Object.values(err.fields).join(' ')}`;
+  }
+  return null;
+}
+
+export const STATUS_LABEL ={ draft: 'Draft', published: 'Published', archived: 'Archived' };
 export const statusBadge = (s) => h('span', { class: `badge ${s}` }, STATUS_LABEL[s] || s);
 
 export function confirmDialog({ title, message, confirmLabel = 'Confirm', danger = false }) {

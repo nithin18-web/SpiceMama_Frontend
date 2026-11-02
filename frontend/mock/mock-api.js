@@ -82,6 +82,23 @@ const PRODUCT_FIELDS = ['name', 'slug', 'category_id', 'short_description', 'des
 const CATEGORY_FIELDS = ['name', 'slug', 'description', 'sort_order', 'is_active'];
 const pick = (obj, keys) => Object.fromEntries(keys.filter((k) => obj[k] !== undefined).map((k) => [k, obj[k]]));
 const bySort = (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0) || a.id - b.id;
+const blank = (v) => !v || !/[^\p{Z}\s]/u.test(v);
+const paginate = (list, query) => {
+  const per = Math.min(50, Math.max(1, Number(query.per_page) || 12));
+  const page = Math.max(1, Number(query.page) || 1);
+  return { data: list.slice((page - 1) * per, page * per), meta: { page, per_page: per, total: list.length, total_pages: Math.ceil(list.length / per) } };
+};
+// Same rules as the PHP API: active category, both descriptions, one image with alt text.
+function publishProblems(p, s) {
+  const f = {};
+  if (!s.categories.find((c) => c.id === p.category_id)?.is_active) f.category_id = 'Category must be active.';
+  if (blank(p.short_description)) f.short_description = 'Required for publishing.';
+  if (blank(p.description)) f.description = 'Required for publishing.';
+  if (!p.images.some((im) => !blank(im.alt_text))) f.images = 'Add at least one image with alt text.';
+  return f;
+}
+const renumber = (p) => p.images.sort(bySort).forEach((im, i) => { im.sort_order = i; });
+const imageOwner = (s, id) => s.products.find((p) => p.images.some((im) => im.id === id));
 
 export async function handle({ method, path, query, json, headers }) {
   const mode = readMode();
@@ -103,7 +120,7 @@ function route(s, mode, method, path, query, body, headers) {
   let m;
   // ---------- public ----------
   if (method === 'GET' && path === '/products') {
-    let list = mode === 'empty' ? [] : s.products.filter((p) => p.status === 'published');
+    let list = mode === 'empty' ? [] : s.products.filter((p) => p.status === 'published' && s.categories.find((c) => c.id === p.category_id)?.is_active);
     if (query.category) {
       const cat = s.categories.find((c) => c.slug === query.category);
       list = cat ? list.filter((p) => p.category_id === cat.id) : [];
@@ -112,16 +129,11 @@ function route(s, mode, method, path, query, body, headers) {
       const q = String(query.q).toLowerCase().slice(0, 100);
       list = list.filter((p) => `${p.name} ${p.short_description || ''}`.toLowerCase().includes(q));
     }
-    list.sort(bySort);
-    const per = Math.min(50, Math.max(1, Number(query.per_page) || 12));
-    const total = list.length;
-    const pages = Math.max(1, Math.ceil(total / per));
-    const page = Math.max(1, Number(query.page) || 1);
-    return ok({ data: list.slice((page - 1) * per, page * per), meta: { page, per_page: per, total, total_pages: pages } });
+    return ok(paginate(list.sort(bySort), query));
   }
   if (method === 'GET' && (m = path.match(/^\/products\/([^/]+)$/))) {
     const slug = decodeURIComponent(m[1]);
-    const p = s.products.find((x) => x.slug === slug && x.status === 'published');
+    const p = s.products.find((x) => x.slug === slug && x.status === 'published' && s.categories.find((c) => c.id === x.category_id)?.is_active);
     return p ? ok({ data: p }) : fail(404, 'not_found', 'Product not found.');
   }
   if (method === 'GET' && path === '/categories') {
@@ -161,7 +173,11 @@ function route(s, mode, method, path, query, body, headers) {
   // ---------- admin products ----------
   if (path === '/admin/products') {
     const no = authed(s, headers, method !== 'GET'); if (no) return no;
-    if (method === 'GET') return ok({ data: [...s.products].sort(bySort) });
+    if (method === 'GET') {
+      let list = [...s.products].sort(bySort);
+      if (query.status) list = list.filter((p) => p.status === query.status);
+      return ok(paginate(list, query));
+    }
     if (method === 'POST') {
       const fields = validateProduct(body, s, null);
       if (Object.keys(fields).length) return fail(422, 'validation_failed', 'Some fields need attention.', fields);
@@ -171,6 +187,11 @@ function route(s, mode, method, path, query, body, headers) {
       return ok({ data: p }, 201);
     }
   }
+  if ((m = path.match(/^\/admin\/products\/(\d+)$/)) && method === 'GET') {
+    const no = authed(s, headers, false); if (no) return no;
+    const p = s.products.find((x) => x.id === Number(m[1]));
+    return p ? ok({ data: p }) : fail(404, 'not_found', 'Product not found.');
+  }
   if ((m = path.match(/^\/admin\/products\/(\d+)$/)) && method === 'PATCH') {
     const no = authed(s, headers, true); if (no) return no;
     const p = s.products.find((x) => x.id === Number(m[1]));
@@ -178,6 +199,10 @@ function route(s, mode, method, path, query, body, headers) {
     const merged = { ...p, ...pick(body, PRODUCT_FIELDS) };
     const fields = validateProduct(merged, s, p.id);
     if (Object.keys(fields).length) return fail(422, 'validation_failed', 'Some fields need attention.', fields);
+    if (p.status === 'published') {
+      const problems = publishProblems({ ...merged, category_id: Number(merged.category_id) }, s);
+      if (Object.keys(problems).length) return fail(422, 'validation_failed', 'Product does not meet publishing requirements.', problems);
+    }
     Object.assign(p, merged, { category_id: Number(merged.category_id) });
     return ok({ data: p });
   }
@@ -186,8 +211,42 @@ function route(s, mode, method, path, query, body, headers) {
     const p = s.products.find((x) => x.id === Number(m[1]));
     if (!p) return fail(404, 'not_found', 'Product not found.');
     if (!['draft', 'published', 'archived'].includes(body.status)) return fail(422, 'validation_failed', 'Unknown status.', { status: 'Choose draft, published or archived.' });
+    if (body.status === 'published' && p.status !== 'published') {
+      const problems = publishProblems(p, s);
+      if (Object.keys(problems).length) return fail(422, 'validation_failed', 'Product does not meet publishing requirements.', problems);
+    }
     p.status = body.status;
     return ok({ data: p });
+  }
+  if ((m = path.match(/^\/admin\/products\/(\d+)\/images\/order$/)) && method === 'PUT') {
+    const no = authed(s, headers, true); if (no) return no;
+    const p = s.products.find((x) => x.id === Number(m[1]));
+    if (!p) return fail(404, 'not_found', 'Product not found.');
+    const ids = body.image_ids || [];
+    const current = p.images.map((im) => im.id).sort((a, b) => a - b).join();
+    if ([...ids].sort((a, b) => a - b).join() !== current) return fail(409, 'conflict', 'The gallery has changed. Reload the product and try again.');
+    ids.forEach((id, i) => { p.images.find((im) => im.id === id).sort_order = i; });
+    renumber(p);
+    return ok({ data: p });
+  }
+  if ((m = path.match(/^\/admin\/images\/(\d+)$/)) && (method === 'PATCH' || method === 'DELETE')) {
+    const no = authed(s, headers, true); if (no) return no;
+    const id = Number(m[1]);
+    const p = imageOwner(s, id);
+    if (!p) return fail(404, 'not_found', 'Image not found.');
+    const others = p.images.filter((im) => im.id !== id);
+    const keepsAlt = others.some((im) => !blank(im.alt_text));
+    if (method === 'PATCH') {
+      const alt = String(body.alt_text ?? '');
+      if (p.status === 'published' && blank(alt) && !keepsAlt) return fail(422, 'validation_failed', 'A published product needs at least one image with alt text.', { alt_text: 'Required while this is the only described image.' });
+      const image = p.images.find((im) => im.id === id);
+      image.alt_text = alt;
+      return ok({ data: image });
+    }
+    if (p.status === 'published' && !keepsAlt) return fail(409, 'conflict', 'A published product must keep at least one image with alt text. Unpublish it first or add another image.');
+    p.images = others;
+    renumber(p);
+    return { status: 204, body: null };
   }
 
   // ---------- admin categories ----------

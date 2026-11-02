@@ -2,7 +2,7 @@
 import { api } from '../api-client.js';
 import { h, toast } from '../ui.js';
 import { primaryImage } from '../product-look.js';
-import { requireAdmin, reportError, statusBadge, busy, confirmDialog } from './admin-core.js';
+import { requireAdmin, reportError, statusBadge, busy, confirmDialog, publishProblems, publishMessage, publishFailure } from './admin-core.js';
 
 await requireAdmin();
 
@@ -21,6 +21,10 @@ function actionsFor(p) {
   const go = (status, label, confirm) => {
     const b = h('button', { class: `btn btn-sm ${status === 'published' ? 'btn-green' : 'btn-line'}`, type: 'button' }, label);
     b.addEventListener('click', async () => {
+      if (status === 'published') {
+        const problems = publishProblems(p, categories.get(p.category_id));
+        if (problems.length) return toast(`${p.name}: ${publishMessage(problems)}`, 'bad');
+      }
       if (confirm && !(await confirmDialog(confirm))) return;
       busy(b, true, 'Saving…');
       try {
@@ -30,13 +34,14 @@ function actionsFor(p) {
         render();
       } catch (err) {
         busy(b, false);
-        reportError(err);
+        const why = publishFailure(err);
+        if (why) toast(why, 'bad'); else reportError(err);
       }
     });
     return b;
   };
   if (p.status !== 'published') {
-    acts.push(go('published', 'Publish', !p.images?.length ? { title: 'Publish without a photo?', message: `${p.name} has no photo yet. It will show on the website with a “photo to come” box.`, confirmLabel: 'Publish anyway' } : null));
+    acts.push(go('published', 'Publish'));
   }
   if (p.status === 'published') acts.push(go('draft', 'Unpublish', { title: `Unpublish ${p.name}?`, message: 'It will be hidden from the website straight away. You can publish it again any time.', confirmLabel: 'Unpublish', danger: true }));
   if (p.status !== 'archived') acts.push(go('archived', 'Archive', { title: `Archive ${p.name}?`, message: 'Archived products are hidden from the website and moved out of your main list.', confirmLabel: 'Archive', danger: true }));
@@ -71,7 +76,7 @@ function render() {
       return h('tr', {},
         h('td', { class: 'c-thumb' }, h('div', { class: 'thumb' }, im ? h('img', { src: im.url, alt: '', loading: 'lazy' }) : h('span', { class: 'none' }, 'No photo'))),
         h('td', { class: 'name' }, h('a', { href: `/admin/product-edit.html?id=${p.id}` }, p.name), h('small', {}, [p.pack_size_label, `/${p.slug}`].filter(Boolean).join(' · '))),
-        h('td', { 'data-label': 'Category' }, categories.get(p.category_id) || '—'),
+        h('td', { 'data-label': 'Category' }, categories.get(p.category_id)?.name || '—'),
         h('td', { 'data-label': 'Status' }, statusBadge(p.status)),
         h('td', {}, h('div', { class: 'acts' }, actionsFor(p))));
     }))));
@@ -87,9 +92,9 @@ tabs.forEach((t) => t.addEventListener('click', () => {
 q.addEventListener('input', () => { filter.q = q.value.trim(); render(); });
 
 try {
-  const [prod, cats] = await Promise.all([api.admin.products.list(), api.admin.categories.list()]);
+  const [prod, cats] = await Promise.all([api.admin.products.all(), api.admin.categories.list()]);
   products = prod?.data || [];
-  categories = new Map((cats?.data || []).map((c) => [c.id, c.name]));
+  categories = new Map((cats?.data || []).map((c) => [c.id, c]));
   render();
 } catch (err) {
   listBox.setAttribute('aria-busy', 'false');

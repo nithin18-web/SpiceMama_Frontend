@@ -96,7 +96,7 @@ form.addEventListener('submit', async (e) => {
 });
 
 try {
-  const [cats, prods] = await Promise.all([api.admin.categories.list(), api.admin.products.list().catch(() => ({ data: [] }))]);
+  const [cats, prods] = await Promise.all([api.admin.categories.list(), api.admin.products.all().catch(() => ({ data: [] }))]);
   categories = cats?.data || [];
   (prods?.data || []).forEach((p) => productCounts.set(p.category_id, (productCounts.get(p.category_id) || 0) + 1));
   render();

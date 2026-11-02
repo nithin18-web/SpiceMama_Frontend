@@ -109,6 +109,8 @@ table.list { width: 100%; border-collapse: collapse; font-size: .95rem }
 .imgs img { width: 100%; aspect-ratio: 1; object-fit: contain }
 .imgs figcaption { font-size: .78rem; color: var(--ink-soft); line-height: 1.3; word-break: break-word }
 .imgs figcaption b { color: var(--ink) }
+.imgs .img-acts { display: flex; flex-wrap: wrap; gap: 4px }
+.imgs .img-acts .btn { padding-inline: 8px; min-height: 32px; font-size: .78rem }
 .drop { border: 2px dashed var(--line-strong); border-radius: var(--r-md); padding: 20px; text-align: center; display: grid; gap: 8px; justify-items: center; transition: border-color var(--t-fast) ease, background-color var(--t-fast) ease; position: relative }
 .drop.over { border-color: var(--green); background: var(--ok-bg) }
 .drop input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100% }

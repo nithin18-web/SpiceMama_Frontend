@@ -1,4 +1,4 @@
-// The one place the frontend talks to the backend. Follows contracts/API_CONTRACT.yaml exactly.
+// The one place the frontend talks to the backend. Follows the root API_CONTRACT.yaml exactly.
 // Same-origin /api/v1, session cookie for admin, X-CSRF-Token on every admin change.
 import { config } from './config.js';
 
@@ -171,7 +171,17 @@ export const api = {
       csrfToken = null;
     },
     products: {
-      list: () => send('GET', '/admin/products'),
+      list: (query = {}) => send('GET', '/admin/products', { query }),
+      // Every page, for screens that count and filter in the browser. The catalogue is small.
+      all: async () => {
+        const data = [];
+        for (let page = 1; ; page++) {
+          const res = await send('GET', '/admin/products', { query: { page, per_page: 50 } });
+          data.push(...(res?.data || []));
+          if (page >= (res?.meta?.total_pages || 0)) return { data };
+        }
+      },
+      get: (id) => send('GET', `/admin/products/${id}`),
       create: (input) => mutate('POST', '/admin/products', { json: input }),
       update: (id, input) => mutate('PATCH', `/admin/products/${id}`, { json: input }),
       setStatus: (id, status) => mutate('POST', `/admin/products/${id}/status`, { json: { status } }),
@@ -189,6 +199,10 @@ export const api = {
         if (alt_text) form.append('alt_text', alt_text);
         return upload('/admin/images', form, onProgress);
       },
+      update: (id, altText) => mutate('PATCH', `/admin/images/${id}`, { json: { alt_text: altText } }),
+      remove: (id) => mutate('DELETE', `/admin/images/${id}`),
+      // Send every current image id once; the first becomes the main photo. 409 = gallery changed, reload.
+      reorder: (productId, imageIds) => mutate('PUT', `/admin/products/${productId}/images/order`, { json: { image_ids: imageIds } }),
     },
   },
 };
@@ -209,6 +223,8 @@ export function describeError(err) {
       return { title: 'Not allowed', message: 'You don’t have permission for this, or the page is out of date. Reload and try again.', retry: false };
     case status === 404:
       return { title: 'Not found', message: err.message || 'We couldn’t find that.', retry: false };
+    case status === 409:
+      return { title: 'That clashes with a change', message: err.message || 'Reload the page and try again.', retry: false };
     case status === 413:
       return { title: 'File too large', message: 'Choose an image under 5 MB.', retry: false };
     case status === 422:

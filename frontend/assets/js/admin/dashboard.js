@@ -8,7 +8,7 @@ const alertBox = document.getElementById('dash-alert');
 const drafts = document.getElementById('drafts');
 
 try {
-  const [prod, cats] = await Promise.all([api.admin.products.list(), api.admin.categories.list()]);
+  const [prod, cats] = await Promise.all([api.admin.products.all(), api.admin.categories.list()]);
   const list = prod?.data || [];
   const counts = { published: 0, draft: 0, archived: 0 };
   list.forEach((p) => { counts[p.status] = (counts[p.status] || 0) + 1; });
