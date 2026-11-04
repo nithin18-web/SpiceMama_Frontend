@@ -32,7 +32,12 @@
 .motion .stage { position: sticky; top: 0; height: 100vh; height: 100svh }
 .motion .layer.ivory { clip-path: inset(0 calc(100% - var(--seam, 50%)) 0 0) }
 .motion .layer.red { clip-path: inset(0 0 0 var(--seam, 50%)) }
-.motion .hero-copy { position: absolute; left: var(--pad); top: 22vh; width: min(40vw, 560px) }
+/* Copy sits high and scales with viewport height too, so headline, lede and buttons stay clear of
+   the big "Guntur" word (its top is about 14.85vw above the bottom of the screen). */
+.motion .hero-copy { position: absolute; left: var(--pad); top: max(96px, 14vh); width: min(40vw, 560px) }
+.motion .hero-copy h1 { font-size: clamp(30px, min(3.4vw, 6vh), 58px); max-width: 13ch }
+.motion .hero-copy .lede { font-size: 1rem; margin-top: 12px }
+.motion .hero-copy .ctas { margin-top: 18px }
 .motion .te-tag { right: var(--pad); top: 16vh }
 .motion .pouch { left: 50%; top: 52%; height: min(72vh, 780px); width: auto; transform: translate(-50%, -50%) translate(var(--px, 0), var(--py, 0)) rotate(var(--pr, -5deg)) scale(var(--ps, 1)); will-change: transform }
 .motion .origin { position: absolute; left: var(--pad); top: 50%; transform: translateY(calc(-50% + var(--oy, 30px))); opacity: var(--oo, 0); width: min(48vw, 640px); pointer-events: var(--opev, none); visibility: var(--ovis, hidden) }
