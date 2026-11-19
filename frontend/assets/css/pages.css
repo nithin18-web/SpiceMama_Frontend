@@ -124,3 +124,4 @@
   .pack-row { min-height: 260px }
 }
 @media (prefers-reduced-motion: reduce) { .stagebox img { animation: none } }
+.stockist-band h2 { font-size: clamp(32px, 3.6vw, 60px); max-width: 15ch }

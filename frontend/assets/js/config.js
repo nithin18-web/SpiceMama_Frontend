@@ -30,8 +30,8 @@ export const config = Object.freeze({
     brand: 'Spice Mama',
     addressLines: ['G.T. Road, Opp. Market Yard', 'Guntur – 522004, Andhra Pradesh, India'],
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Andhra+Standard+Products+G.T.+Road+Guntur+522004',
-    phone: '+919441547648',
-    phoneDisplay: '+91 94415 47648',
+    phone: '+919621042104',
+    phoneDisplay: '+91 96210 42104',
     email: 'andhrastandardproducts@gmail.com',
     // Empty until the owner confirms a WhatsApp business number. Buttons stay hidden while empty.
     whatsapp: '',

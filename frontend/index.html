@@ -24,6 +24,7 @@
   (function () {
     var d = document.documentElement;
     d.classList.add('js-reveal');
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('intro');
     if (matchMedia('(min-height: 480px)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
   })();
 </script>
@@ -39,7 +40,7 @@
     <a href="/#kitchen" data-nav="kitchen">Recipes</a>
     <a href="/about.html" data-nav="about">Our story</a>
     <a href="/contact.html" data-nav="contact">Contact</a>
-    <a class="cta" href="/contact.html#stockists">Become a stockist</a>
+    <a class="cta" href="/contact.html#stockists">Trade enquiry</a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-panel"><span class="bars" aria-hidden="true"></span>Menu</button>
   </div>
 </nav>
@@ -49,10 +50,10 @@
   <a href="/#kitchen">Recipes</a>
   <a href="/about.html" data-nav="about">Our story</a>
   <a href="/contact.html" data-nav="contact">Contact</a>
-  <a class="btn btn-red menu-cta" href="/contact.html#stockists">Become a stockist</a>
+  <a class="btn btn-red menu-cta" href="/contact.html#stockists">Trade enquiry</a>
   <div class="menu-contact">
     <span>Customer care</span>
-    <a href="tel:+919441547648">+91 94415 47648</a>
+    <a href="tel:+919621042104">+91 96210 42104</a>
   </div>
 </div>
 <!-- /partial:nav -->
@@ -60,18 +61,18 @@
 <main id="main">
 <section class="hero" id="hero" aria-label="Spice Mama, made in Guntur">
   <div class="stage">
-    <div class="layer ivory"><div class="bigword" aria-hidden="true">Guntur</div></div>
-    <div class="layer red"><div class="bigword" aria-hidden="true">Guntur</div></div>
+    <div class="layer ivory"><div class="bigword" aria-hidden="true"><span style="--i:0">G</span><span style="--i:1">u</span><span style="--i:2">n</span><span style="--i:3">t</span><span style="--i:4">u</span><span style="--i:5">r</span></div></div>
+    <div class="layer red"><div class="bigword" aria-hidden="true"><span style="--i:0">G</span><span style="--i:1">u</span><span style="--i:2">n</span><span style="--i:3">t</span><span style="--i:4">u</span><span style="--i:5">r</span></div></div>
+    <canvas class="dust" aria-hidden="true"></canvas>
     <div class="hero-copy">
-      <h1>The flavours of home, made in Guntur since 1978.</h1>
+      <h1><span class="w"><span style="--i:0">The</span></span> <span class="w"><span style="--i:1">flavours</span></span> <span class="w"><span style="--i:2">of</span></span> <span class="w"><span style="--i:3">home,</span></span> <span class="w"><span style="--i:4">made</span></span> <span class="w"><span style="--i:5">in</span></span> <span class="w"><span style="--i:6">Guntur</span></span> <span class="w"><span style="--i:7">since</span></span> <span class="w"><span style="--i:8">1978.</span></span></h1>
       <p class="lede">Chilli powders, spice powders and masalas from Spice Mama, by the makers of Oont Chap.</p>
       <div class="ctas">
         <a class="btn btn-red" href="#range">See the range</a>
-        <a class="btn btn-line" href="/contact.html#stockists">Become a stockist</a>
       </div>
     </div>
     <p class="te-tag" lang="te">గుంటూరు<span>ఆంధ్రప్రదేశ్</span></p>
-    <img class="pouch" src="/assets/images/packs/guntur-gold-premium-chilli-powder.webp" width="721" height="1089" alt="Spice Mama Guntur Gold Premium Chilli Powder stand-up pouch" fetchpriority="high">
+    <img class="pouch" src="/assets/images/packs/guntur-gold-premium-chilli-powder.webp" width="780" height="1100" alt="Spice Mama Guntur Gold Premium Chilli Powder stand-up pouch" fetchpriority="high">
     <div class="origin" id="story">
       <p class="since">Since <b>1978</b></p>
       <h2>Opposite the Market Yard, Guntur.</h2>
@@ -115,11 +116,11 @@
   </div>
 
   <article class="recipe" id="r-rasam" role="tabpanel" aria-labelledby="t-rasam" tabindex="0">
-    <div class="dish"><img src="/assets/images/recipes/tomato-rasam.webp" width="400" height="270" alt="A bowl of rasam with tomato and dried red chilli" loading="lazy" decoding="async"><span class="tagph">Placeholder: crop from pack art. Needs real food photography.</span></div>
+    <div class="dish"><img src="/assets/images/recipes/tomato-rasam.webp" width="1000" height="1000" alt="A bowl of rasam with tomato and dried red chilli" loading="lazy" decoding="async"><span class="tagph">Placeholder: crop from pack art. Needs real food photography.</span></div>
     <div>
       <h3>Tomato rasam</h3>
       <p class="meta">Serves 4 · 25 minutes</p>
-      <a class="uses" href="/product.html?slug=rasam-powder"><img src="/assets/images/packs/rasam-powder-sm.webp" width="400" height="491" alt="" loading="lazy" decoding="async"><span>Made with Spice Mama Rasam Powder</span></a>
+      <a class="uses" href="/product.html?slug=rasam-powder"><img src="/assets/images/packs/rasam-powder-sm.webp" width="400" height="597" alt="" loading="lazy" decoding="async"><span>Made with Spice Mama Rasam Powder</span></a>
       <h4>You need</h4>
       <ul><li>A lime-sized ball of tamarind, soaked in 2 cups warm water</li><li>2 ripe tomatoes, crushed by hand</li><li>1½ tsp rasam powder, ¼ tsp turmeric powder, salt</li><li>½ cup thin cooked toor dal water</li><li>Ghee, mustard seeds, 2 dried red chillies, curry leaves, a pinch of hing, coriander leaves</li></ul>
       <h4>Method</h4>
@@ -128,11 +129,11 @@
   </article>
 
   <article class="recipe" id="r-sambar" role="tabpanel" aria-labelledby="t-sambar" tabindex="0" hidden>
-    <div class="dish"><img src="/assets/images/recipes/vegetable-sambar.webp" width="400" height="285" alt="A bowl of vegetable sambar with drumstick and potato" loading="lazy" decoding="async"><span class="tagph">Placeholder: crop from pack art. Needs real food photography.</span></div>
+    <div class="dish"><img src="/assets/images/recipes/vegetable-sambar.webp" width="1000" height="1000" alt="A bowl of vegetable sambar with drumstick and potato" loading="lazy" decoding="async"><span class="tagph">Placeholder: crop from pack art. Needs real food photography.</span></div>
     <div>
       <h3>Mixed vegetable sambar</h3>
       <p class="meta">Serves 4 · 40 minutes</p>
-      <a class="uses" href="/product.html?slug=sambar-powder"><img src="/assets/images/packs/sambar-powder-sm.webp" width="400" height="605" alt="" loading="lazy" decoding="async"><span>Made with Spice Mama Sambar Powder</span></a>
+      <a class="uses" href="/product.html?slug=sambar-powder"><img src="/assets/images/packs/sambar-powder-sm.webp" width="400" height="597" alt="" loading="lazy" decoding="async"><span>Made with Spice Mama Sambar Powder</span></a>
       <h4>You need</h4>
       <ul><li>½ cup toor dal, cooked soft with turmeric</li><li>2 cups vegetables: drumstick, potato, shallots</li><li>A small ball of tamarind, soaked and squeezed</li><li>2 tbsp sambar powder, salt</li><li>Oil, mustard seeds, a few fenugreek seeds, dried red chilli, curry leaves, hing</li></ul>
       <h4>Method</h4>
@@ -141,11 +142,11 @@
   </article>
 
   <article class="recipe" id="r-methi" role="tabpanel" aria-labelledby="t-methi" tabindex="0" hidden>
-    <div class="dish"><img src="/assets/images/recipes/aloo-methi-fry.webp" width="320" height="250" alt="A bowl of potato fry with fenugreek leaves" loading="lazy" decoding="async"><span class="tagph">Placeholder: crop from pack art. Needs real food photography.</span></div>
+    <div class="dish"><img src="/assets/images/recipes/aloo-methi-fry.webp" width="1000" height="1000" alt="A bowl of potato fry with fenugreek leaves" loading="lazy" decoding="async"><span class="tagph">Placeholder: crop from pack art. Needs real food photography.</span></div>
     <div>
       <h3>Aloo methi fry</h3>
       <p class="meta">Serves 3 · 25 minutes</p>
-      <a class="uses" href="/product.html?slug=kasuri-methi"><img src="/assets/images/packs/kasuri-methi-sm.webp" width="400" height="490" alt="" loading="lazy" decoding="async"><span>Made with Spice Mama Kasuri Methi and Guntur Gold</span></a>
+      <a class="uses" href="/product.html?slug=kasuri-methi"><img src="/assets/images/packs/kasuri-methi-sm.webp" width="400" height="488" alt="" loading="lazy" decoding="async"><span>Made with Spice Mama Kasuri Methi and Guntur Gold</span></a>
       <h4>You need</h4>
       <ul><li>3 potatoes, cubed</li><li>2 tbsp kasuri methi, crushed between your palms</li><li>1 tsp chilli powder, 1 tsp coriander powder, ½ tsp turmeric, salt</li><li>2 tbsp oil, 1 tsp cumin seeds</li></ul>
       <h4>Method</h4>
@@ -167,19 +168,10 @@
 </section>
 
 <section class="promise" id="promise" aria-labelledby="promise-title">
-  <h2 id="promise-title" class="reveal">Read the back of the pack.</h2>
-  <p class="intro reveal">We only say here what is printed on our packs. One ingredient per pack, and where it comes from.</p>
-  <div class="labels">
-    <div class="label reveal"><figure><div class="crop"><img src="/assets/images/labels/chilli-back.webp" width="232" height="445" alt="Back of the Chilli Powder pack: ingredients, chilli; made from red chillies from Guntur" loading="lazy" decoding="async"></div>
-      <figcaption><b>Chilli, from Guntur</b>Ingredients: chilli. Made from red chillies from Guntur, packed to keep their freshness and flavour.</figcaption></figure></div>
-    <div class="label reveal"><figure><div class="crop"><img src="/assets/images/labels/turmeric-back.webp" width="236" height="432" alt="Back of the Turmeric Powder pack: ingredients, turmeric; made from turmeric from Erode" loading="lazy" decoding="async"></div>
-      <figcaption><b>Turmeric, from Erode</b>Ingredients: turmeric. Made from fresh turmeric from Erode.</figcaption></figure></div>
-    <div class="label reveal"><figure><div class="crop"><img src="/assets/images/labels/coriander-back.webp" width="232" height="450" alt="Back of the Coriander Powder pack: ingredients, coriander; from Madhya Pradesh and Rajasthan" loading="lazy" decoding="async"></div>
-      <figcaption><b>Coriander, from M.P. and Rajasthan</b>Ingredients: coriander. Made from green coriander from Madhya Pradesh and Rajasthan.</figcaption></figure></div>
-  </div>
+  <h2 id="promise-title" class="reveal">Our promise.</h2>
   <div class="marks reveal">
     <div>
-      <h3>Also on every pack</h3>
+      <h3>On every pack</h3>
       <p class="ph-note" style="margin-top:18px"><b>Placeholder:</b> how the spices are cleaned, dried and ground isn’t stated on the packs, so it isn’t stated here. Add it once the brand supplies it.</p>
     </div>
     <dl>
@@ -193,9 +185,33 @@
   </div>
 </section>
 
+<section class="reviews" id="reviews" aria-labelledby="reviews-title">
+  <div class="reviews-head reveal">
+    <h2 id="reviews-title">What our customers say.</h2>
+    <p class="ph-note"><b>Sample reviews:</b> these are placeholders to show the layout. Replace them with real customer reviews before the site goes live.</p>
+  </div>
+  <div class="review-grid">
+    <figure class="review reveal">
+      <p class="stars" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg></p>
+      <blockquote><p>The Guntur Gold chilli powder gives our curries a deep red colour and real heat. A little goes a long way.</p></blockquote>
+      <figcaption><b>Lakshmi R.</b><span>Guntur</span></figcaption>
+    </figure>
+    <figure class="review reveal">
+      <p class="stars" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg></p>
+      <blockquote><p>Sambar powder that tastes like home. My mother noticed the difference the first time I used it.</p></blockquote>
+      <figcaption><b>Srinivas K.</b><span>Vijayawada</span></figcaption>
+    </figure>
+    <figure class="review reveal">
+      <p class="stars" role="img" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="currentColor"/></svg></p>
+      <blockquote><p>Good, clean turmeric with a bright colour. We have been buying Oont Chap products in our family for years.</p></blockquote>
+      <figcaption><b>Padma V.</b><span>Hyderabad</span></figcaption>
+    </figure>
+  </div>
+</section>
+
 <section class="partners" id="partners" aria-labelledby="partners-title">
   <div class="reveal">
-    <h2 id="partners-title">Stock Spice Mama.</h2>
+    <h2 id="partners-title">Ready for distribution and retail market? Please reach us.</h2>
     <p>For retailers, wholesalers and distributors. Tell us about your business and we’ll get back to you from Andhra Standard Products in Guntur.</p>
     <p class="ph-note"><b>Placeholders:</b> trade terms, minimum order, the regions served and a dedicated trade contact. Not supplied, so not shown.</p>
   </div>
@@ -212,7 +228,7 @@
     <div class="actions-row">
       <a class="btn btn-red" data-stockist="mail" href="mailto:andhrastandardproducts@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h15A1.5 1.5 0 0 1 21 6.5v11a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Email us</a>
       <a class="btn btn-green" data-stockist="whatsapp" href="#" hidden>WhatsApp us</a>
-      <a class="btn btn-line" data-stockist="tel" href="tel:+919441547648"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>Call +91 94415 47648</a>
+      <a class="btn btn-line" data-stockist="tel" href="tel:+919621042104"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>Call +91 96210 42104</a>
     </div>
     <p class="note">Email opens your mail app with a short message ready to fill in. Email: <a href="mailto:andhrastandardproducts@gmail.com">andhrastandardproducts@gmail.com</a></p>
   </div>
@@ -239,7 +255,7 @@
     </div>
     <div>
       <h2>Spice Mama</h2>
-      <ul><li><a href="/about.html">Our story</a></li><li><a href="/#kitchen">Recipes</a></li><li><a href="/#promise">Our promise</a></li><li><a href="/contact.html#stockists">Become a stockist</a></li><li><a href="/contact.html">Contact</a></li></ul>
+      <ul><li><a href="/about.html">Our story</a></li><li><a href="/#kitchen">Recipes</a></li><li><a href="/#promise">Our promise</a></li><li><a href="/contact.html#stockists">Trade enquiry</a></li><li><a href="/contact.html">Contact</a></li></ul>
       <h2 style="margin-top:22px">Follow</h2>
       <p class="ph" style="font-size:.86rem">Social links not supplied</p>
     </div>
@@ -247,7 +263,7 @@
       <h2>Contact</h2>
       <address>Andhra Standard Products<br>G.T. Road, Opp. Market Yard<br>Guntur – 522004, Andhra Pradesh, India</address>
       <ul style="margin-top:12px">
-        <li><a href="tel:+919441547648">+91 94415 47648</a></li>
+        <li><a href="tel:+919621042104">+91 96210 42104</a></li>
         <li><a href="mailto:andhrastandardproducts@gmail.com">andhrastandardproducts@gmail.com</a></li>
       </ul>
     </div>

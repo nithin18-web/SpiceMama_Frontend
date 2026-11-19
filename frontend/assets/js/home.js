@@ -3,6 +3,7 @@ import { api, describeError } from './api-client.js';
 import { h, icon, links } from './ui.js';
 import { lookFor, primaryImage } from './product-look.js';
 import { initStockist } from './stockist.js';
+import { playDust } from './hero-dust.js';
 
 const HOME_LIMIT = 12;
 
@@ -264,3 +265,4 @@ if (document.fonts?.ready) document.fonts.ready.then(() => { layout(); update();
 addEventListener('load', () => { layout(); update(); });
 setMode();
 loadRange();
+if (root.classList.contains('intro')) playDust(hero.querySelector('.dust'), pouch);
